@@ -1,0 +1,14 @@
+{
+  "name": "fib-vc",
+  "version": "1.0.0",
+  "description": "",
+  "repository": "",
+  "main": "lib/index.js",
+  "keywords": "",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fib-jsonld": "^1.0.0",
+    "fib-did-key": "^1.0.0"
+  }
+}
