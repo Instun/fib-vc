@@ -1,38 +1,27 @@
+const keyJson = require("./data/keys/key-0-ed25519.json");
+const credentialWithoutProof = require("./data/credentials/credential-3.json");
 var ssl = require('ssl');
+var crypto = require('crypto');
 var vc = require("..");
 var dkey = require("fib-did-key");
 
-ssl.loadRootCerts();
+vc.contexts["did:example:123"] = keyJson;
 
-const credential = {
-    "@context": [
-        "https://www.w3.org/2018/credentials/v1",
-        "https://w3id.org/security/suites/jws-2020/v1",
-    ],
-    id: "http://example.edu/credentials/3732",
-    type: ["VerifiableCredential"],
-    issuer: {
-        id: 'did:key:z6MkokrsVo8DbGDsnMAjnoHhJotMbDZiHfvxM4j65d8prXUr#z6MkokrsVo8DbGDsnMAjnoHhJotMbDZiHfvxM4j65d8prXUr',
-    },
-    issuanceDate: "2010-01-01T19:23:24Z",
-    credentialSubject: {
-        id: "did:example:ebfeb1f712ebc6f1c276e12ec21",
-    },
-};
+console.log("============= credentialWithoutProof", credentialWithoutProof);
 
 var c = vc.credential.issue({
-    credential,
-    key: {
-        kty: "OKP",
-        crv: "Ed25519",
-        x: "ijtvFnowiumYMcYVbaz6p64Oz6bXwe2V_9IlCgDR_38",
-        d: "ZrHpIW1JBb-sK2-wzKV0mQjbxpnxjUCu151QZ9_F_Vs",
-    }
+    credential: credentialWithoutProof,
+    date: credentialWithoutProof.issuanceDate,
+    id: keyJson.id,
+    key: keyJson.privateKeyJwk
 });
+
+console.log("============= credential", c);
+// c.name = 'lion';
+// c.credentialSubject.id = 'did:example:123';
 
 var r = vc.credential.verify({
     credential: c
 });
 
-console.log(c);
 console.log(r);
