@@ -1,11 +1,7 @@
+var vc = require("..");
+
 const keyJson = require("./data/keys/key-0-ed25519.json");
 const credentialWithoutProof = require("./data/credentials/credential-3.json");
-var ssl = require('ssl');
-var crypto = require('crypto');
-var vc = require("..");
-var dkey = require("fib-did-key");
-
-vc.contexts["did:example:123"] = keyJson;
 
 console.log("============= credentialWithoutProof", credentialWithoutProof);
 
@@ -21,7 +17,8 @@ console.log("============= credential", c);
 // c.credentialSubject.id = 'did:example:123';
 
 var r = vc.credential.verify({
-    credential: c
+    credential: c,
+    key: keyJson
 });
 
 console.log(r);
