@@ -14,32 +14,30 @@ describe("vc", () => {
         creds.forEach(cred => {
             const credJson = require(`./data/credentials/${cred}.json`);
             keys.forEach(key => {
-                if (key != "key-4-rsa2048") {
-                    const keyJson = require(`./data/keys/${key}.json`);
-                    it(`${cred}--${key}`, () => {
-                        var vcJson = vc.credential.issue({
-                            credential: credJson,
-                            date: credJson.issuanceDate,
-                            id: keyJson.id,
-                            key: keyJson.privateKeyJwk
-                        });
-
-                        var r = vc.credential.verify({
-                            credential: vcJson,
-                            key: keyJson
-                        });
-
-                        assert.isTrue(r.verified);
-
-                        vcJson.credentialSubject.fake = "fake";
-                        var r = vc.credential.verify({
-                            credential: vcJson,
-                            key: keyJson
-                        });
-                        delete vcJson.credentialSubject.fake;
-                        assert.equal(r.verified, false);
+                const keyJson = require(`./data/keys/${key}.json`);
+                it(`${cred}--${key}`, () => {
+                    var vcJson = vc.credential.issue({
+                        credential: credJson,
+                        date: credJson.issuanceDate,
+                        id: keyJson.id,
+                        key: keyJson.privateKeyJwk
                     });
-                }
+
+                    var r = vc.credential.verify({
+                        credential: vcJson,
+                        key: keyJson
+                    });
+
+                    assert.isTrue(r.verified);
+
+                    vcJson.credentialSubject.fake = "fake";
+                    var r = vc.credential.verify({
+                        credential: vcJson,
+                        key: keyJson
+                    });
+                    delete vcJson.credentialSubject.fake;
+                    assert.equal(r.verified, false);
+                });
             });
         });
     });
@@ -50,27 +48,25 @@ describe("vc", () => {
                 creds.forEach(cred => {
                     const credJson = require(`./data/credentials/${cred}.json`);
                     keys.forEach(key => {
-                        if (key != "key-4-rsa2048") {
-                            const keyJson = require(`./data/keys/${key}.json`);
-                            if (fs.exists(path.join(__dirname, `./data/implementations/${impl}/${cred}--${key}.vc.json`)))
-                                it(`${cred}--${key}`, () => {
-                                    const vcJson = require(`./data/implementations/${impl}/${cred}--${key}.vc.json`);
+                        const keyJson = require(`./data/keys/${key}.json`);
+                        if (fs.exists(path.join(__dirname, `./data/implementations/${impl}/${cred}--${key}.vc.json`)))
+                            it(`${cred}--${key}`, () => {
+                                const vcJson = require(`./data/implementations/${impl}/${cred}--${key}.vc.json`);
 
-                                    var r = vc.credential.verify({
-                                        credential: vcJson,
-                                        key: keyJson
-                                    });
-                                    assert.isTrue(r.verified);
-
-                                    vcJson.credentialSubject.fake = "fake";
-                                    var r = vc.credential.verify({
-                                        credential: vcJson,
-                                        key: keyJson
-                                    });
-                                    delete vcJson.credentialSubject.fake;
-                                    assert.equal(r.verified, false);
+                                var r = vc.credential.verify({
+                                    credential: vcJson,
+                                    key: keyJson
                                 });
-                        }
+                                assert.isTrue(r.verified);
+
+                                vcJson.credentialSubject.fake = "fake";
+                                var r = vc.credential.verify({
+                                    credential: vcJson,
+                                    key: keyJson
+                                });
+                                delete vcJson.credentialSubject.fake;
+                                assert.equal(r.verified, false);
+                            });
                     });
                 });
             });
