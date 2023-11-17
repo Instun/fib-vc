@@ -29,7 +29,15 @@ describe("vc", () => {
                             key: keyJson
                         });
 
-                        assert.isUndefined(r.error);
+                        assert.isTrue(r.verified);
+
+                        vcJson.credentialSubject.fake = "fake";
+                        var r = vc.credential.verify({
+                            credential: vcJson,
+                            key: keyJson
+                        });
+                        delete vcJson.credentialSubject.fake;
+                        assert.equal(r.verified, false);
                     });
                 }
             });
@@ -47,12 +55,20 @@ describe("vc", () => {
                             if (fs.exists(path.join(__dirname, `./data/implementations/${impl}/${cred}--${key}.vc.json`)))
                                 it(`${cred}--${key}`, () => {
                                     const vcJson = require(`./data/implementations/${impl}/${cred}--${key}.vc.json`);
+
                                     var r = vc.credential.verify({
                                         credential: vcJson,
                                         key: keyJson
                                     });
+                                    assert.isTrue(r.verified);
 
-                                    assert.isUndefined(r.error);
+                                    vcJson.credentialSubject.fake = "fake";
+                                    var r = vc.credential.verify({
+                                        credential: vcJson,
+                                        key: keyJson
+                                    });
+                                    delete vcJson.credentialSubject.fake;
+                                    assert.equal(r.verified, false);
                                 });
                         }
                     });
