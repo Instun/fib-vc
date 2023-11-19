@@ -86,6 +86,7 @@ describe("vp", () => {
                         presentation: presentationJson,
                         date: presentationJson.issuanceDate,
                         id: keyJson.id,
+                        challenge: "challenge",
                         key: keyJson.privateKeyJwk
                     });
 
